@@ -1,0 +1,10 @@
+{
+    "name": "light-wasm",
+    "version": "0.6.0",
+    "description": "",
+    "main": "src/index.ts",
+    "type": "module",
+    "devDependencies": {
+        "light-core": "*"
+    }
+}

@@ -1,0 +1,44 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ], // 添加 node 类型
+    "typeRoots": [
+      "node_modules/@types"
+    ], // 确保类型根目录正确（通常默认包含）
+    // "allowImportingTsExtensions": true, // TypeScript 5.0+ 支持导入 .ts 扩展名
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "composite": true,
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ],
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+  },
+  "include": [
+    "packages/**/*.ts",
+    "packages/**/*.d.ts",
+    "packages/**/*.tsx",
+    "packages/**/*.vue"
+  ],
+  "exclude": [
+    "packages/light-occ/occ-wasm",
+    "packages/light-wasm/lib"
+  ]
+}

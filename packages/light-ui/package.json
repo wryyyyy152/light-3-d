@@ -1,0 +1,22 @@
+{
+    "name": "light-ui",
+    "version": "0.6.0",
+    "description": "",
+    "main": "src/index.ts",
+    "devDependencies": {
+        "light-core": "*",
+        "light-controls": "*",
+        "light-geo": "*",
+        "light-vis": "*",
+        "vue": "^3.5.17",
+        "vue-loader": "^17.4.2",
+        "@types/vue": "^2.0.0",
+        "@vue/tsconfig": "^0.7.0",
+        "vue-router": "^4.3.0",
+        "vue3-draggable-resizable": "^1.6.5",
+        "axios": "^1.7.2",
+        "mitt": "^3.0.1",
+        "pinia": "^2.1.7",
+        "pinia-plugin-persistedstate": "^3.2.1"
+    }
+}

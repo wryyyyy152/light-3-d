@@ -1,0 +1,7 @@
+services:
+  light3d:
+    build:
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:80"
