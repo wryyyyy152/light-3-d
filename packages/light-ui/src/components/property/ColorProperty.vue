@@ -39,4 +39,27 @@ const inputValue = (object: any) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.panel {
+    margin: 3px 0;
+}
+.color {
+    width: 64px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+.panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+.propertyName {
+    font-size: 14px;
+    opacity: 0.75;
+    color: var(--color);
+    min-width: 72px;
+    flex: 0 1 auto;
+}
+</style>

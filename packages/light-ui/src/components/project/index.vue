@@ -1,11 +1,11 @@
 <template>
-    <div :class="`root ${props.className}`">
+    <div class="root">
         <div class="headerPanel">
             <span class="header" v-i18n="{ i18nKey: 'items.header' }"></span>
-            <ToolBar></ToolBar>
+            <ToolBar :document="activeDocument"></ToolBar>
         </div>
         <div class="itemsPanel">
-
+            <Tree ref="treeRef" v-if="activeDocument" :document="activeDocument"></Tree>
         </div>
     </div>
 </template>
@@ -13,51 +13,39 @@
 <script setup lang="ts">
 import type {
     IDocument,
+    INode,
     IView
 } from 'light-core';
 import {
     PubSub,
 } from "light-core";
-import { defineExpose, onMounted, provide } from 'vue';
+import { onMounted, provide, ref, toRaw } from 'vue';
 import ToolBar from './ToolBar.vue';
 import Tree from './tree/index.vue';
+import type TreeItem from './tree/TreeItem.vue';
 
-const props = defineProps<{
-    className: string
-}>();
-
-let _activeDocument: IDocument | undefined = undefined;
-provide<IDocument|undefined>('activeDocument', _activeDocument)
+const activeDocument = ref<IDocument | undefined>();
 
 onMounted(() => {
     PubSub.default.sub("activeViewChanged", handleActiveViewChanged);
     PubSub.default.sub("documentClosed", handleDocumentClosed);
 })
 
-const _documentTreeMap = new Map<IDocument, InstanceType<typeof Tree>>();
-
 const handleDocumentClosed = (document: IDocument) => {
-    const tree = _documentTreeMap.get(document);
-    if (tree) {
-        // todo:
-
-        // tree.remove();
-        // tree.dispose();
-        // _documentTreeMap.delete(document);
-    }
+    if (toRaw(activeDocument.value) === document) activeDocument.value = undefined
 };
-
 const handleActiveViewChanged = (view: IView | undefined) => {
-    if (_activeDocument === view?.document) return;
+    if (toRaw(activeDocument.value) === view?.document) return;
 
-    _activeDocument = view?.document;
-
-    // todo
+    activeDocument.value = view?.document;
 };
 
-defineExpose({
-
-})
+const treeRef = ref<InstanceType<typeof Tree>>()
+const getTreeItem = (node: INode): InstanceType<typeof TreeItem> | undefined =>{
+    if (!treeRef.value) return
+    return treeRef.value.treeItem(node)
+}
+provide('getTreeItem', getTreeItem)
 </script>
 
 <style lang="scss" scoped>
@@ -92,7 +80,8 @@ defineExpose({
     flex: 1;
     margin: 2px 6px;
 }
-
+</style>
+<style lang="scss">
 @media (max-width: 680px) {
     .root {
         display: none;

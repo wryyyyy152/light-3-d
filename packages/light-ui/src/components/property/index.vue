@@ -1,5 +1,5 @@
 <template>
-    <div :class="`root ${props.className}`">
+    <div class="root">
         <label class="header" v-i18n="{ i18nKey: 'properties.header' }"></label>
         <div class="panel">
             <div class="properties">
@@ -21,10 +21,6 @@ import Expander from '../common/Expander.vue';
 import type { controlType } from '../utils';
 import MatrixProperty from './MatrixProperty.vue';
 import { findPropertyControl } from './utils';
-
-const props = defineProps<{
-    className: string
-}>();
 
 const handleShowProperties = (document: IDocument, nodes: INode[]) => {
     if (nodes.length === 0) return;
@@ -110,4 +106,41 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.root {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    margin: 2px 18px;
+    font-size: 1.15rem;
+    font-weight: bold;
+    flex: 0;
+}
+
+.panel {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    background-color: var(--panel-background-color);
+}
+
+.properties {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.name {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+    align-items: center;
+}
+</style>

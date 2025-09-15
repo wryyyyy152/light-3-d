@@ -61,4 +61,26 @@ const _handleActiveViewChanged = (view: IView | undefined) => {
 init()
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.root {
+    display: flex;
+    flex-direction: row;
+    background: var(--viewport-background-color);
+    position: relative;
+}
+
+.viewports {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.viewport {
+    width: 100%;
+    height: 100%;
+}
+
+.hidden {
+    display: none;
+}
+</style>

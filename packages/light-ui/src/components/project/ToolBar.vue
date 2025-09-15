@@ -1,9 +1,8 @@
 <template>
     <div class="panel">
-        <template v-for="b in buttons">
-            <a>{{ I18n.translate(b.tip) }}</a>
+        <a v-for="b in buttons" :title="I18n.translate(b.tip)">
             <SvgIcon :icon-name="b.icon" class="svg" @click="b.command"></SvgIcon>
-        </template>
+        </a>
     </div>
 </template>
 
@@ -12,6 +11,11 @@ import type { I18nKeys, IDocument } from 'light-core';
 import { I18n, INode, PubSub } from 'light-core';
 import { inject, ref } from 'vue';
 import SvgIcon from '../common/SvgIcon.vue';
+import type TreeItem from './TreeItem.vue';
+
+const props = defineProps<{
+    document: IDocument | undefined
+}>();
 
 interface button {
     icon: string,
@@ -31,25 +35,22 @@ const unExpandAll = () => {
     setExpand(false);
 };
 
-const activeDocument = inject<IDocument | undefined>('activeDocument')
-
 const setExpand = (expand: boolean) => {
-    let first = activeDocument?.rootNode.firstChild;
+    let first = props.document?.rootNode.firstChild;
     if (first) setNodeExpand(first, expand);
 }
 
+const getTreeItem = inject<(node: INode) => InstanceType<typeof TreeItem> | undefined>('getTreeItem')
 const setNodeExpand = (list: INode, expand: boolean) => {
-    // todo 
-    
-    // let item = tree.treeItem(list);
-    // if (item instanceof TreeGroup) {
-    //     item.isExpanded = expand;
-    // }
+    if (!getTreeItem) return
+    let item = getTreeItem(list);
+    item.setExpanded(expand)
+
     if (INode.isLinkedListNode(list) && list.firstChild) {
         setNodeExpand(list.firstChild, expand);
     }
     if (list.nextSibling) {
-        setNodeExpand( list.nextSibling, expand);
+        setNodeExpand(list.nextSibling, expand);
     }
 }
 

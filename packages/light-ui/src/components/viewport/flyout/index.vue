@@ -53,4 +53,14 @@ const clearInput = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.root {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    margin-left: 15px;
+    opacity: 0.75;
+    z-index: 888;
+}
+</style>

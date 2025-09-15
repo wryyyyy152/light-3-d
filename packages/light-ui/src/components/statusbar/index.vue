@@ -1,5 +1,5 @@
 <template>
-    <div :class="`panel ${props.className}`">
+    <div class="panel">
         <div class="left">
             <label class="tip">{{ textContent }}</label>
         </div>
@@ -14,10 +14,6 @@ import type { I18nKeys } from 'light-core';
 import { Config, I18n, Navigation3D, PubSub } from 'light-core';
 import { ref } from 'vue';
 import SnapConfig from './SnapConfig.vue';
-
-const props = defineProps<{
-    className: string
-}>();
 
 const _isDefaultTip = ref<boolean>(true);
 const textContent = ref()

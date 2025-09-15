@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { IDocument, INodeChangedObserver, NodeRecord } from 'light-core';
 import { INode, PubSub } from 'light-core';
-import { computed, defineExpose, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineExpose, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import TreeItem from './TreeItem.vue';
 
 const props = defineProps<{
@@ -31,15 +31,17 @@ let lastClicked: INode | undefined = undefined;
 const treeForNodeChanged: INodeChangedObserver = {
     handleNodeChanged(records: NodeRecord[]) {
         records.forEach((record) => {
-            // const componemt = nodeMap.get(record.node);
-            // if (!componemt || !record.newParent) return;
+            if (record.oldParent) {
+                let oloParent = nodeMap.get(record.oldParent)
+                if (oloParent) {
+                    oloParent.forceRefershComputed()
+                }
+            }
 
             if (!record.newParent) return;
-
-            let parent = nodeMap.get(record.newParent)
-
-            if (parent) {
-                parent.forceRefershComputed()
+            let newParent = nodeMap.get(record.newParent)
+            if (newParent) {
+                newParent.forceRefershComputed()
             }
         })
     }
@@ -47,13 +49,15 @@ const treeForNodeChanged: INodeChangedObserver = {
 
 const panelRef = ref()
 onMounted(() => {
-    addEvents(panelRef.value.$el)
+    nextTick(() => {
+        addEvents(panelRef.value)
+    })
     props.document.addNodeObserver(treeForNodeChanged);
     PubSub.default.sub("selectionChanged", handleSelectionChanged);
 })
 
 onUnmounted(() => {
-    removeEvents(panelRef.value.$el)
+    removeEvents(panelRef.value)
     props.document.removeNodeObserver(treeForNodeChanged);
     PubSub.default.remove("selectionChanged", handleSelectionChanged);
 })
@@ -106,8 +110,12 @@ const expandParents = (node: INode) => {
     }
 }
 
-defineExpose({
+const treeItem = (node: INode): InstanceType<typeof TreeItem> | undefined => {
+    return nodeMap.get(node);
+}
 
+defineExpose({
+    treeItem
 })
 
 const addEvents = (item: HTMLElement) => {

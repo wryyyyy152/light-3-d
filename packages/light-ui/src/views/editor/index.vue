@@ -3,8 +3,8 @@
         <Ribbon :application="application" :quick-commands="quickCommands" :ribbon-tabs="ribbonTabs" />
         <div class="content">
             <div class="sidebar">
-                <ProjectView class="sidebarItem" class-name="sidebarItem"></ProjectView>
-                <PropertyView class="sidebarItem" class-name="sidebarItem"></PropertyView>
+                <ProjectView class="sidebarItem"></ProjectView>
+                <PropertyView class="sidebarItem"></PropertyView>
             </div>
             <div class="viewportContainer">
                 <MaterialEditor v-if="context" :data-content="context"></MaterialEditor>
@@ -12,7 +12,7 @@
                 <LayoutViewport :app="application" class="viewport"></LayoutViewport>
             </div>
         </div>
-        <Statusbar  class="statusbar" class-name="statusbar"></Statusbar>
+        <Statusbar class="statusbar"></Statusbar>
     </div>
 </template>
 
@@ -162,12 +162,6 @@ const _handleMaterialEdit = (
 
         & .viewportContainer {
             height: 100px;
-            width: 100%;
-        }
-
-        & .sidebar {
-            display: none;
-            flex: 1 1 auto;
             width: 100%;
         }
     }
