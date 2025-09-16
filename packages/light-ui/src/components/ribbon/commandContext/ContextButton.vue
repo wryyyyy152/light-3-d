@@ -4,18 +4,15 @@
 
 <script setup lang="ts">
 import type { ICommand, Property } from 'light-core';
+import { toRaw } from 'vue';
 
 const props = defineProps<{
     command: ICommand,
     group: Property,
 }>();
 
-const noType = props.command as any;
+const noType = toRaw(props.command) as any;
 const handleClick=()=>{
     noType[props.group.name]()
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

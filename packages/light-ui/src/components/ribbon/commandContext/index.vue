@@ -1,20 +1,20 @@
 <template>
-    <div class="panel">
-        <SvgIcon class="icon" :icon-name="data!.icon"></SvgIcon>
-        <label class="title" v-i18n="{ i18nKey: `command.${data!.key}` }"></label>
+    <div :class="style.panel">
+        <SvgIcon :class="style.icon" :icon-name="data!.icon"></SvgIcon>
+        <label :class="style.title" v-i18n="{ i18nKey: `command.${data!.key}` }"></label>
     </div>
 
     <!-- 属性分组 -->
     <template v-for="group in groupedProperties">
-        <div class="group">
+        <div :class="style.group">
             <!-- 根据属性类型渲染不同控件 -->
             <div :v-show="visible(group)">
                 <template v-if="group.type === 'materialId'">
-                    <MaterialButton :command="command" :group="group" class="materialButton" />
+                    <MaterialButton :command="command" :group="group" :class="style.materialButton" />
                 </template>
 
                 <template v-else-if="getItemType(group) === 'function'">
-                    <ContextButton :command="command" :group="group" class="button" />
+                    <ContextButton :command="command" :group="group" :class="style.button" />
                 </template>
 
                 <template v-else-if="getItemType(group) === 'boolean'">
@@ -41,6 +41,7 @@
 import type { CommandData, ICommand } from 'light-core';
 import { Combobox, Command, Property } from 'light-core';
 import { computed, ref } from 'vue';
+import style from '../../../styles/commandContext.module.css';
 import SvgIcon from '../../common/SvgIcon.vue';
 import CheckBox from './CheckBox.vue';
 import ComboboxControl from './Combobox.vue';
@@ -77,79 +78,3 @@ const visible = (group: Property): boolean => {
     return true;
 }
 </script>
-
-<style lang="scss">
-.panel {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin: 2px 8px;
-    gap: 12px;
-}
-
-.title {
-    font-weight: bold;
-}
-
-.group {
-    display: flex;
-    margin-left: 6px;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-}
-
-.button {
-    padding: 2px 12px;
-    font-size: 1em;
-    border-radius: 6px;
-    color: var(--foreground-color);
-    border: 1px solid var(--border-color);
-    background-color: var(--control-background-color);
-
-    &:hover {
-        background-color: var(--hover-background-color);
-    }
-}
-
-.icon {
-    width: 14px;
-    height: 14px;
-}
-
-.input {
-    margin-left: 8px;
-    width: 64px;
-    background-color: var(--input-background-color);
-    border: 1px solid var(--input-border-color);
-    color: var(--input-text-color);
-}
-
-.select {
-    margin-left: 8px;
-    padding: 2px 12px;
-    font-size: 1em;
-    border-radius: 6px;
-    color: var(--foreground-color);
-    border: 1px solid var(--border-color);
-    background-color: var(--control-background-color);
-}
-
-.materialButton {
-    flex: 1 1 auto;
-    font-size: 1rem;
-    padding: 2px 24px;
-    outline: none;
-    background-color: transparent;
-
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    margin: 0px;
-
-    &:hover {
-        background-color: var(--hover-background-color);
-    }
-}
-</style>

@@ -1,13 +1,14 @@
 <template>
     <div>
         <label v-i18n="{ i18nKey: props.group.display }"></label>
-        <input type="text" class="input" :value="value" @keydown="handleKeyDown($event)">
+        <input type="text" :class="style.input" :value="value" @keydown="handleKeyDown($event)">
     </div>
 </template>
 
 <script setup lang="ts">
 import type { ICommand, Property } from 'light-core';
-import { computed } from 'vue';
+import { computed, toRaw } from 'vue';
+import style from '../../../styles/commandContext.module.css';
 
 const props = defineProps<{
     command: ICommand,
@@ -20,7 +21,7 @@ const value = computed(() => {
     return noType1[props.group.name]
 })
 
-const noType = props.command as any;
+const noType = toRaw(props.command) as any;
 const handleKeyDown = (e: KeyboardEvent) => {
     e.stopPropagation();
     if (e.key === "Enter") {
@@ -30,9 +31,3 @@ const handleKeyDown = (e: KeyboardEvent) => {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.input {
-    margin-left: 8px;
-}
-</style>

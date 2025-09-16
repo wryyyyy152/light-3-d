@@ -1,7 +1,7 @@
 <template>
-    <div class="root" :style="{ cursor }">
-        <viewport v-if="activeViewportPorp" class="viewport" :view="activeViewportPorp.view"
-            :show-view-controls="activeViewportPorp.showViewControls">
+    <div :class="style.root" :style="{ cursor }">
+        <viewport v-if="activeViewport" :class="style.viewport" :view="activeViewport"
+            :show-view-controls="props.showViewControls">
         </viewport>
     </div>
 </template>
@@ -9,9 +9,10 @@
 <script setup lang="ts">
 import type { CollectionChangedArgs, CursorType, IApplication, IView } from 'light-core';
 import { CollectionAction, PubSub } from 'light-core';
-import { onMounted, onUnmounted, ref, withDefaults } from 'vue';
+import { onMounted, onUnmounted, ref, toRaw, withDefaults } from 'vue';
+import style from '../../styles/layoutViewport.module.css';
 import { Cursor, } from '../cursor';
-// import Viewport from './Viewport.vue';
+import Viewport from './Viewport.vue';
 
 const props = withDefaults(defineProps<{
     app: IApplication;
@@ -19,24 +20,16 @@ const props = withDefaults(defineProps<{
 }>(), {
     showViewControls: () => true
 });
-const init = () => {
-    props.app.views.onCollectionChanged(_handleViewCollectionChanged);
-}
 
-interface viewportPorpType { view: IView, showViewControls: boolean }
-let viewportPorpMap: Map<IView, viewportPorpType> = new Map()
-const activeViewportPorp = ref<viewportPorpType>()
+const activeViewport = ref<IView>()
+
 const _handleViewCollectionChanged = (args: CollectionChangedArgs) => {
-    if (args.action === CollectionAction.add) {
-        args.items.forEach((view) => {
-            viewportPorpMap.set(view, { view: view as IView, showViewControls: props.showViewControls })
-        });
-    } else if (args.action === CollectionAction.remove) {
-        args.items.forEach((view) => {
-            viewportPorpMap.delete(view)
-        });
+    const _activeViewport = toRaw(activeViewport.value)
+    if (args.action === CollectionAction.remove && args.items.includes(_activeViewport)) {
+        activeViewport.value = undefined
     }
 };
+props.app.views.onCollectionChanged(_handleViewCollectionChanged);
 
 onMounted(() => {
     PubSub.default.sub("activeViewChanged", _handleActiveViewChanged);
@@ -55,32 +48,6 @@ const _handleCursor = (type: CursorType) => {
 
 const _handleActiveViewChanged = (view: IView | undefined) => {
     if (!view) return
-    activeViewportPorp.value = viewportPorpMap.get(view)
+    activeViewport.value = view
 };
-
-init()
 </script>
-
-<style lang="scss" scoped>
-.root {
-    display: flex;
-    flex-direction: row;
-    background: var(--viewport-background-color);
-    position: relative;
-}
-
-.viewports {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.viewport {
-    width: 100%;
-    height: 100%;
-}
-
-.hidden {
-    display: none;
-}
-</style>

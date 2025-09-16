@@ -1,7 +1,7 @@
 <template>
-    <div class="panel">
+    <div :class="style.panel">
         <a v-for="b in buttons" :title="I18n.translate(b.tip)">
-            <SvgIcon :icon-name="b.icon" class="svg" @click="b.command"></SvgIcon>
+            <SvgIcon :icon-name="b.icon" :class="style.svg" @click="b.command"></SvgIcon>
         </a>
     </div>
 </template>
@@ -10,6 +10,7 @@
 import type { I18nKeys, IDocument } from 'light-core';
 import { I18n, INode, PubSub } from 'light-core';
 import { inject, ref } from 'vue';
+import style from '../../styles/toolBar.module.css';
 import SvgIcon from '../common/SvgIcon.vue';
 import type TreeItem from './TreeItem.vue';
 
@@ -60,22 +61,3 @@ const buttons = ref<button[]>([
     { icon: "icon-expand", tip: "items.tool.expandAll", command: expandAll },
 ]);
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    display: flex;
-    flex-direction: row;
-    flex: 0;
-}
-
-.svg {
-    width: 16px;
-    height: 16px;
-    margin-left: 12px;
-    padding: 6px;
-}
-
-.svg:hover {
-    background-color: var(--hover-background-color);
-}
-</style>

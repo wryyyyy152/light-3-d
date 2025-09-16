@@ -1,5 +1,5 @@
 <template>
-  <svg class="svg-icon" aria-hidden="true">
+  <svg :class="style.svgIcon" aria-hidden="true">
     <use :xlink:href="iconClassName" />
     <title>{{ title }}</title>
   </svg>
@@ -7,6 +7,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import style from '../../styles/icon.module.css';
+
 const props = defineProps({
   iconName: {
     type: String,
@@ -22,14 +24,3 @@ const iconClassName = computed(() => {
   return `#${props.iconName}`;
 })
 </script>
-
-<style scoped>
-.svg-icon {
-  width: 1em;
-  height: 1em;
-  position: relative;
-  vertical-align: -2px;
-  color: inherit;
-  fill: currentColor;
-}
-</style>

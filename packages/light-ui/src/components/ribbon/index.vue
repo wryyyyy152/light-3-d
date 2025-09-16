@@ -1,19 +1,19 @@
 <template>
-    <div class="root">
-        <div class="titleBar">
-            <div class="left">
-                <div class="appIcon" @click="handleDisplayHome">
-                    <SvgIcon class="icon" icon-name="icon-light"></SvgIcon>
+    <div :class="style.root">
+        <div :class="style.titleBar">
+            <div :class="style.left">
+                <div :class="style.appIcon" @click="handleDisplayHome">
+                    <SvgIcon :class="style.icon" icon-name="icon-light"></SvgIcon>
                     <span id="appHome">Light3D - v{{ appVersion }}</span>
                 </div>
-                <div class="ribbonTitlePanel">
-                    <SvgIcon class="home" icon-name="icon-home" @click="handleDisplayHome"></SvgIcon>
-                    <div class="quickCommands">
+                <div :class="style.ribbonTitlePanel">
+                    <SvgIcon :class="style.home" icon-name="icon-home" @click="handleDisplayHome"></SvgIcon>
+                    <div :class="style.quickCommands">
                         <template v-for="(command) in props.quickCommands">
                             <QuickButton :command="command" />
                         </template>
                     </div>
-                    <span class="split"></span>
+                    <span :class="style.split"></span>
                     <template v-for="tab in props.ribbonTabs">
                         <label v-i18n="{ i18nKey: tab.tabName }" @click="handleChangeActiveTab(tab)"
                             :class="getRibbonTabClass(tab)">
@@ -21,47 +21,47 @@
                     </template>
                 </div>
             </div>
-            <div class="center">
-                <div class="views">
+            <div :class="style.center">
+                <div :class="style.views">
                     <Collection :sources="props.application.views">
                         <template v-slot="slotProps">
                             <div :class="getViewClass(slotProps.item)" @click="handleChangeActiveView(slotProps.item)">
-                                <div class="name">
+                                <div :class="style.name">
                                     <span>{{ slotProps.item.document.name }}</span>
                                 </div>
-                                <SvgIcon class="close" icon-name="icon-times" @click="handleCloseview($event, slotProps.item)">
+                                <SvgIcon :class="style.close" icon-name="icon-times" @click="handleCloseview($event, slotProps.item)">
                                 </SvgIcon>
                             </div>
                         </template>
                     </Collection>
                 </div>
-                <SvgIcon class="new" icon-name="icon-plus" @click="handleNewDoc()"
+                <SvgIcon :class="style.new" icon-name="icon-plus" @click="handleNewDoc()"
                     :title="I18n.translate('command.doc.new')">
                 </SvgIcon>
             </div>
-            <div class="right">
+            <div :class="style.right">
                 <a href="https://github.com/xiangechen/chili3d" target="_blank"></a>
-                <SvgIcon title="Github" class="icon" icon-name="icon-github"></SvgIcon>
+                <SvgIcon title="Github" :class="style.icon" icon-name="icon-github"></SvgIcon>
             </div>
         </div>
-        <div class="tabContentPanel">
+        <div :class="style.tabContentPanel">
             <template v-for="(ribbonTab) in props.ribbonTabs">
-                <div class="groupPanel" :style="getGroupPanelStyle(ribbonTab)">
+                <div :class="style.groupPanel" :style="getGroupPanelStyle(ribbonTab)">
                     <template v-for="(group) in ribbonTab.groups">
-                        <div class="ribbonGroup">
-                            <div class="content">
+                        <div :class="style.ribbonGroup">
+                            <div :class="style.content">
                                 <template v-for="item in group.items">
                                     <!-- 渲染按钮或按钮组 -->
                                     <component :is="renderButton(item)?.component" v-bind="renderButton(item)?.props" />
                                 </template>
                             </div>
-                            <label class="header" v-i18n="{ i18nKey: group.groupName }"></label>
+                            <label :class="style.header" v-i18n="{ i18nKey: group.groupName }"></label>
                         </div>
                     </template>
                 </div>
             </template>
         </div>
-        <div class="commandContextPanel">
+        <div :class="style.commandContextPanel">
             <CommandContext v-if="receivedCommand" :command="receivedCommand"></CommandContext>
         </div>
     </div>
@@ -70,7 +70,8 @@
 <script setup lang="ts">
 import type { CommandKeys, I18nKeys, IApplication, ICommand, IView } from "light-core";
 import { ButtonSize, Command, I18n, Logger, ObservableCollection, PubSub } from "light-core";
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, toRaw } from 'vue';
+import style from '../../styles/ribbon.module.css';
 import Collection from "../common/Collection.vue";
 import SvgIcon from '../common/SvgIcon.vue';
 import CommandContext from './commandContext/index.vue';
@@ -106,7 +107,8 @@ const handleChangeActiveView = (view: IView) => {
 }
 const handleCloseview = (e: Event, view: IView) => {
     e.stopPropagation();
-    view.close();
+    const _view = toRaw(view)
+    _view.close()
 }
 const handleNewDoc = () => {
     PubSub.default.pub("executeCommand", "doc.new")
@@ -159,10 +161,10 @@ const renderButton = (item: RibbonCommandData): {
 }
 
 const getRibbonTabClass = (tab: RibbonTabData): string => {
-    return _activeTabName.value === tab.tabName ? 'tabHeader activedTab' : 'tabHeader'
+    return _activeTabName.value === tab.tabName ? `${style.tabHeader} ${style.activedTab}` : style.tabHeader
 }
 const getViewClass = (view: IView): string => {
-    return _activeView.value === view ? 'tab active' : 'tab'
+    return _activeView.value === view ? `${style.tab} ${style.active}` : style.tab
 }
 const getGroupPanelStyle = (tab: RibbonTabData): string => {
     return _activeTabName.value === tab.tabName ? "" : "display:none"
@@ -180,7 +182,6 @@ onUnmounted(() => {
 
 const receivedCommand = ref<ICommand | undefined>(undefined)
 const _openContext = (command: ICommand) => {
-    console.log('-------_openContext-------')
     receivedCommand.value = command
 };
 
@@ -188,292 +189,3 @@ const _closeContext = () => {
     receivedCommand.value = undefined
 };
 </script>
-
-<style lang="scss" scoped>
-.root {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.split {
-    width: 1px;
-    height: 14px;
-    margin: 0px 8px;
-    background-color: rgba(128, 128, 128, 0.45);
-}
-
-.titleBar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 2px 4px;
-
-    .left {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-self: center;
-
-        .appIcon {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-self: center;
-            border-radius: 8px;
-            padding: 4px 8px;
-            margin: 2px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: var(--hover-background-color);
-            }
-
-            .icon {
-                width: 24px;
-                height: 24px;
-                padding: 2px;
-            }
-
-            span {
-                margin-left: 16px;
-                font-weight: bolder;
-                text-wrap: nowrap;
-            }
-        }
-    }
-
-    .center {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin: auto;
-        flex: 0 1 auto;
-        overflow: auto;
-
-        .views {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            border-radius: 8px;
-            padding: 2px 0px;
-            overflow: hidden;
-
-            .tab {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                border-radius: 6px;
-                height: 26px;
-                background-color: var(--title-background);
-                padding: 2px;
-                width: 220px;
-                overflow: hidden;
-                margin: 0px 2px;
-                cursor: default;
-                transition: width 0.2s ease-out;
-
-                &:hover {
-                    background-color: var(--hover-background-color);
-                }
-
-                .name {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    margin-right: auto;
-                    margin-left: 8px;
-                    text-wrap: nowrap;
-                    user-select: none;
-                    text-decoration: dashed;
-                    overflow: hidden;
-
-                    .split {
-                        padding: 0px 4px;
-                    }
-
-                    span {
-                        font-size: 12px;
-                    }
-                }
-
-                .close {
-                    width: 14px;
-                    height: 14px;
-                    margin: 4px;
-                    padding: 4px;
-                    border-radius: 6px;
-                    flex-shrink: 0;
-
-                    &:hover {
-                        background-color: var(--hover-background-color);
-                    }
-                }
-            }
-
-            .active {
-                width: 260px;
-                background-color: var(--title-checked);
-            }
-        }
-
-        .new {
-            width: 14px;
-            height: 14px;
-            margin-left: 2px;
-            padding: 4px;
-            border-radius: 6px;
-
-            &:hover {
-                background-color: var(--hover-background-color);
-            }
-        }
-    }
-
-    .right {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin: 2px 8px;
-        flex: 0 0 auto;
-
-        .icon {
-            width: 24px;
-            height: 24px;
-            padding: 4px;
-            border-radius: 4px;
-
-            &:hover {
-                background-color: var(--hover-background-color);
-            }
-        }
-    }
-}
-
-.ribbonTitlePanel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 0px 4px;
-    flex: 0 0 auto;
-
-    .home {
-        width: 14px;
-        height: 14px;
-        padding: 4px;
-        border-radius: 4px;
-        margin: 0px 4px;
-
-        &:hover {
-            background-color: var(--hover-background-color);
-        }
-    }
-
-    & .quickCommands {
-        display: flex;
-        flex-direction: row;
-
-        ::v-deep .quick-button {
-            width: 14px;
-            height: 14px;
-            padding: 4px;
-            border-radius: 4px;
-            margin: 0px 6px;
-
-            &:hover {
-                background-color: var(--hover-background-color);
-            }
-        }
-    }
-
-    .tabHeader {
-        color: var(--titlebar-forground-color);
-        padding: 5px 15px;
-
-        &:hover {
-            -webkit-text-stroke: 0.65px var(--foreground-color);
-            background-color: var(--hover-background-color);
-        }
-    }
-
-    .activedTab {
-        position: relative;
-
-        &::after {
-            content: "";
-            position: absolute;
-            bottom: -2px;
-            left: 8px;
-            right: 8px;
-            height: 3px;
-            background-color: var(--primary-color);
-        }
-    }
-}
-
-.tabContentPanel {
-    display: flex;
-    flex-direction: row;
-    background-color: var(--panel-background-color);
-    border-bottom: 1px solid var(--border-color);
-    overflow-x: auto;
-
-    &::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: var(--foreground-muted-color);
-        border-radius: 5px;
-    }
-
-    & .groupPanel {
-        display: flex;
-        flex-direction: row;
-    }
-}
-
-.commandContextPanel {
-    display: flex;
-    flex-direction: row;
-    justify-content: stretch;
-    flex: 1 1 auto;
-    height: 32px;
-    background-color: var(--panel-background-color);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.ribbonGroup {
-    position: relative;
-    display: grid;
-    grid-template-rows: 1fr auto;
-    justify-items: center;
-    flex-shrink: 0;
-
-    .header {
-        color: var(--foreground-color);
-        font-size: 12px;
-    }
-
-    .content {
-        height: 72px;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-items: center;
-        overflow: hidden;
-    }
-}
-
-.ribbonGroup::after {
-    content: "";
-    position: absolute;
-    display: grid;
-    right: 0px;
-    top: 6px;
-    bottom: 6px;
-    width: 1px;
-    background-color: var(--border-color);
-}
-</style>

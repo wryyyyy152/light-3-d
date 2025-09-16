@@ -1,5 +1,5 @@
 <template>
-    <div class="panel" :class="className">
+    <div :class="style.panel">
         <InputProperty :document="props.document" :objects="[first]" :property="{
             name: 'transform',
             display: 'transform.translation',
@@ -18,13 +18,13 @@
 <script setup lang="ts">
 import type { GroupNode, IDocument, VisualNode } from 'light-core';
 import { onMounted, onUnmounted } from 'vue';
+import style from '../../styles/propertyBase.module.css';
 import InputProperty from './InputProperty.vue';
 import { RotateConverter, ScalingConverter, TranslationConverter } from './utils';
 
 const props = defineProps<{
     document: IDocument,
     geometries: (VisualNode | GroupNode)[],
-    className: string,
     objects: any[],
 }>();
 
@@ -51,9 +51,3 @@ const onPropertyChanged = (property: keyof (VisualNode | GroupNode)) => {
     }
 };
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    margin: 3px 0;
-}
-</style>

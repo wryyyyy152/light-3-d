@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import type { ICommand, Property } from 'light-core';
-import { computed } from 'vue';
+import { computed, toRaw } from 'vue';
 
 const props = defineProps<{
     command: ICommand,
@@ -19,10 +19,8 @@ const checked = computed(() => {
     return noType1[props.group.name]
 })
 
-const noType = props.command as any;
+const noType = toRaw(props.command) as any;
 const handleClick = () => {
     noType[props.group.name] = !noType[props.group.name];
 }
 </script>
-
-<style lang="scss" scoped></style>

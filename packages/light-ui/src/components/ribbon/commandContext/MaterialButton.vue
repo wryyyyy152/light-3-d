@@ -14,7 +14,7 @@ import { MultistepCommand } from "light";
 import { ColorConverter, UrlStringConverter } from "light-controls";
 import type { ICommand, Property } from 'light-core';
 import { CancelableCommand, PubSub } from 'light-core';
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 
 const props = defineProps<{
     command: ICommand,
@@ -24,7 +24,7 @@ const props = defineProps<{
 if (!(props.command instanceof CancelableCommand)) {
     throw new Error("MaterialEditor only support CancelableCommand");
 }
-const noType = props.command as any;
+const noType = toRaw(props.command) as any;
 let material = props.command.document.materials.find((x) => x.id === noType[props.group.name])!;
 let display = material.clone();
 
@@ -43,7 +43,3 @@ const handleClick = () => {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

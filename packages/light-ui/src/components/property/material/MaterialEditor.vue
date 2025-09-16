@@ -110,7 +110,7 @@ const _onEditingMaterialChanged = (property: keyof MaterialDataContent) => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .root {
     display: flex;
     flex-direction: column;

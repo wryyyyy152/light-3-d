@@ -2,7 +2,7 @@
     <!-- 基础按钮结构 -->
     <div ref="buttonRef" :class="buttonClassName" v-i18n:title="{ i18nKey: props.display }" @click="props.onClick">
         <svg-icon :icon-name="props.icon" :class="getSvgClass()"></svg-icon>
-        <label class="buttonText" v-i18n="{ i18nKey: props.display }"></label>
+        <label :class="style.buttonText" v-i18n="{ i18nKey: props.display }"></label>
     </div>
 </template>
 
@@ -16,6 +16,7 @@ import {
     ButtonSize
 } from "light-core";
 import { computed, onMounted, ref } from 'vue';
+import style from '../../styles/ribbonButton.module.css';
 import SvgIcon from "../common/SvgIcon.vue";
 
 // 组件属性
@@ -35,11 +36,11 @@ const props = defineProps<{
 }>();
 
 const buttonClassName = computed(() => {
-    return props.size === ButtonSize.large ? 'normal' : 'small';
+    return props.size === ButtonSize.large ? style.normal : style.small;
 })
 
 const getSvgClass = (): string => {
-    return props.size === ButtonSize.large ? 'icon' : 'smallIcon';
+    return props.size === ButtonSize.large ? style.icon : style.smallIcon;
 }
 
 const buttonRef = ref(null)
@@ -52,67 +53,3 @@ onMounted(() => {
     }
 })
 </script>
-
-<style lang="scss" scoped>
-.normal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 4px;
-    margin: 4px;
-    border-radius: 4px;
-    max-width: 42px;
-}
-
-.normal:hover {
-    opacity: 0.85;
-    background-color: var(--hover-background-color);
-}
-
-.normal:active {
-    background-color: var(--active-background-color);
-}
-
-.small {
-    display: flex;
-    flex-direction: row;
-    justify-items: top;
-    padding: 4px;
-    margin: 0px 4px;
-    min-width: 80px;
-    max-width: 100px;
-}
-
-.checked {
-    background-color: var(--checked-color);
-}
-
-.small:hover {
-    opacity: 0.85;
-    background-color: var(--hover-background-color);
-}
-
-.small:active {
-    background-color: var(--active-background-color);
-}
-
-.buttonText {
-    color: var(--foreground-color);
-    font-size: 12px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
-}
-
-.icon {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 4px;
-}
-
-.smallIcon {
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-}
-</style>

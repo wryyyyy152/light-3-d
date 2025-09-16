@@ -1,5 +1,5 @@
 <template>
-    <div class="root">
+    <div :class="style.root">
         <tip v-if="tipProp" :msg="tipProp.msg" :type="tipProp.type"></tip>
         <flyout-input v-if="inputProp" ref="inputRef" :text="inputProp.text"
             :handler="inputProp.handler"></flyout-input>
@@ -10,6 +10,7 @@
 import type { I18nKeys, MessageType, Result } from 'light-core';
 import { PubSub } from 'light-core';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import style from '../../../styles/flyout.module.css';
 import FlyoutInput from './FlyoutInput.vue';
 import Tip from './Tip.vue';
 
@@ -52,15 +53,3 @@ const clearInput = () => {
     if (inputProp.value !== undefined) lastFocus?.focus();
 };
 </script>
-
-<style lang="scss" scoped>
-.root {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    margin-top: 15px;
-    margin-left: 15px;
-    opacity: 0.75;
-    z-index: 888;
-}
-</style>

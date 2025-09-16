@@ -1,7 +1,7 @@
 <template>
-    <div class="panel" ref="panelRef">
+    <div :class="style.panel" ref="panelRef">
         <template v-if="rootNode">
-            <tree-item :document="document" :node="rootNode" :node-map="nodeMap" />
+            <TreeItem :document="document" :node="rootNode" :node-map="nodeMap" />
         </template>
     </div>
 </template>
@@ -10,6 +10,7 @@
 import type { IDocument, INodeChangedObserver, NodeRecord } from 'light-core';
 import { INode, PubSub } from 'light-core';
 import { computed, defineExpose, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import style from '../../../styles/tree.module.css';
 import TreeItem from './TreeItem.vue';
 
 const props = defineProps<{
@@ -52,12 +53,12 @@ onMounted(() => {
     nextTick(() => {
         addEvents(panelRef.value)
     })
+    
     props.document.addNodeObserver(treeForNodeChanged);
     PubSub.default.sub("selectionChanged", handleSelectionChanged);
 })
 
 onUnmounted(() => {
-    removeEvents(panelRef.value)
     props.document.removeNodeObserver(treeForNodeChanged);
     PubSub.default.remove("selectionChanged", handleSelectionChanged);
 })
@@ -200,22 +201,3 @@ const onClick = (event: MouseEvent) => {
     // this.setLastClickItem(item);
 };
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    margin: 4px;
-}
-
-.selected {
-    background-color: var(--hover-background-color);
-}
-
-.current {
-    outline: 2px solid var(--primary-color);
-}
-
-.dragging {
-    opacity: 0.56;
-    pointer-events: none;
-}
-</style>

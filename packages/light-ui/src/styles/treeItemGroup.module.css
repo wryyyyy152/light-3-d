@@ -1,0 +1,55 @@
+.expanderIcon {
+    width: 12px;
+    height: 12px;
+    padding: 2px 4px;
+}
+
+.left16px {
+    padding-left: 16px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.hide {
+    display: none;
+}
+
+.header {
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.header:hover {
+    background-color: var(--hover-background-color);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.name {
+    flex: 1 1 auto;
+    font-size: 12px;
+    user-select: none;
+    text-wrap: nowrap;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    overflow: hidden;
+}
+
+.icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    padding: 0px 8px;
+}
+
+.parent-hidden {
+    opacity: 0.56;
+}

@@ -1,5 +1,5 @@
 <template>
-    <SvgIcon v-if="data" class="quick-button" :icon-name="data?.icon" :title="localizedTitle" @click="executeCommand">
+    <SvgIcon v-if="data" :icon-name="data?.icon" :title="localizedTitle" @click="executeCommand">
     </SvgIcon>
     <span v-else></span>
 </template>
@@ -41,5 +41,3 @@ const executeCommand = () => {
     if (data.value) PubSub.default.pub("executeCommand", data.value.key)
 }
 </script>
-
-<style lang="scss" scoped></style>

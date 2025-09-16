@@ -1,7 +1,7 @@
 <template>
-    <div class="panel">
+    <div :class="style.panel">
         <template v-for="(material, index) in materials">
-            <div class="material">
+            <div :class="style.material">
                 <div>
                     <span v-i18n="{ i18nKey: 'common.material' }"></span>
                     <span v-if="materials.length > 1">{{ ` ${index + 1}` }}</span>
@@ -24,6 +24,7 @@
 import { ColorConverter, UrlStringConverter } from 'light-controls';
 import type { IDocument, Property, } from 'light-core';
 import { Material, ObservableCollection, PubSub, Transaction } from 'light-core';
+import style from '../../styles/materialProperty.module.css';
 
 const props = defineProps<{
     document: IDocument,
@@ -69,39 +70,3 @@ const setMaterial = (e: MouseEvent, material: Material, index: number) => {
     props.document.visual.update();
 }
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    margin: 3px 0;
-}
-.material {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 4px;
-
-    div {
-        font-size: 14px;
-        opacity: 0.75;
-        color: var(--color);
-        min-width: 72px;
-        flex: 0 1 auto;
-    }
-
-    button {
-        flex: 1 1 auto;
-        font-size: 1rem;
-        padding: 4px;
-        outline: none;
-        background-color: transparent;
-
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        margin: 0px;
-
-        &:hover {
-            background-color: var(--hover-background-color);
-        }
-    }
-}
-</style>

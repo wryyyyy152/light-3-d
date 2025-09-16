@@ -1,6 +1,6 @@
 <template>
     <label v-i18n="{ i18nKey: props.group.display }"></label>
-    <select class="select" @change="handleChange($event)">
+    <select :class="style.select" @change="handleChange($event)">
         <template v-for="op in options">
             <option :value="op.textContent" :selected="op.selected"></option>
         </template>
@@ -10,14 +10,15 @@
 <script setup lang="ts">
 import type { ICommand, Property } from 'light-core';
 import { Combobox, I18n } from 'light-core';
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
+import style from '../../../styles/commandContext.module.css';
 
 const props = defineProps<{
     command: ICommand,
     group: Property,
 }>();
 
-const noType = props.command as any;
+const noType = toRaw(props.command) as any;
 let combobox = noType[props.group.name] as Combobox<any>;
 let options1 = combobox.items.map((item, index): { selected: boolean, textContent: string } => {
     return {
@@ -33,15 +34,3 @@ const handleChange = (e: Event) => {
     combobox.selectedIndex = (e.target as HTMLSelectElement).selectedIndex;
 }
 </script>
-
-<style lang="scss" scoped>
-.select {
-    margin-left: 8px;
-    padding: 2px 12px;
-    font-size: 1em;
-    border-radius: 6px;
-    color: var(--foreground-color);
-    border: 1px solid var(--border-color);
-    background-color: var(--control-background-color);
-}
-</style>

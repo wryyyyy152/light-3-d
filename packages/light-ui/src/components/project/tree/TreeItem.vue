@@ -106,5 +106,3 @@ onUnmounted(() => {
     props.nodeMap.delete(props.node)
 })
 </script>
-
-<style lang="scss" scoped></style>

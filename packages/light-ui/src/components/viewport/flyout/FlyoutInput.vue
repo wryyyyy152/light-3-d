@@ -1,7 +1,7 @@
 <template>
-    <div class="panel">
+    <div :class="style.panel">
         <input ref="inputRef" :value="textboxValue" @keydown="handleKeyDown($event)" :readonly="readOnly">
-        <label v-if="tipContext" class="error" v-i18n="{ i18nKey: tipContext }"></label>
+        <label v-if="tipContext" :class="style.error" v-i18n="{ i18nKey: tipContext }"></label>
     </div>
 </template>
 
@@ -9,6 +9,7 @@
 import type { I18nKeys } from 'light-core';
 import { Result } from "light-core";
 import { defineExpose, nextTick, ref } from 'vue';
+import style from '../../../styles/flyoutInput.module.css';
 
 const props = defineProps<{
     text: string,
@@ -71,27 +72,3 @@ defineExpose({
     onCompleted
 })
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    font-size: 13px;
-    background-color: var(--panel-background-color);
-    color: var(--foreground-color);
-    opacity: 0.85;
-    display: flex;
-    flex-direction: column;
-    border-radius: 4px;
-    margin: 2px 0px;
-
-    input {
-        background-color: var(--control-background-color);
-        color: var(--input-text-color);
-        border: 1px solid var(--input-border-color);
-    }
-}
-
-.error {
-    color: red;
-    font-size: 11px;
-}
-</style>

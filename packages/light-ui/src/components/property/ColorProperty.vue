@@ -1,7 +1,7 @@
 <template>
-    <div class="panel">
-        <label class="propertyName" v-i18n="{ i18nKey: props.property.display }"></label>
-        <input type="color" class="color" @change="setColor($event)" :value="inputValue(props.objects[0])">
+    <div :class="style.panel">
+        <label :class="style.propertyName" v-i18n="{ i18nKey: props.property.display }"></label>
+        <input type="color" :class="style.color" @change="setColor($event)" :value="inputValue(props.objects[0])">
     </div>
 </template>
 
@@ -9,6 +9,7 @@
 import { ColorConverter } from 'light-controls';
 import type { IDocument, Property } from 'light-core';
 import { PubSub, Transaction } from 'light-core';
+import style from '../../styles/colorPorperty.module.css';
 
 const props = defineProps<{
     document: IDocument,
@@ -38,28 +39,3 @@ const inputValue = (object: any) => {
     else return object[props.property.name]
 }
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    margin: 3px 0;
-}
-.color {
-    width: 64px;
-    height: 32px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-}
-.panel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-}
-.propertyName {
-    font-size: 14px;
-    opacity: 0.75;
-    color: var(--color);
-    min-width: 72px;
-    flex: 0 1 auto;
-}
-</style>

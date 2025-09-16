@@ -22,4 +22,4 @@ I18n.languages.forEach((language, index) =>
 );
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="css" scoped></style>

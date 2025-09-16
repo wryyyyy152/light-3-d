@@ -12,7 +12,7 @@ const config = defineConfig({
         main: "./packages/light-web/src/index.ts",
     },
     experiments: {
-        css: false,
+        css: true,
     },
     module: {
         parser: {

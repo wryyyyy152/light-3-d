@@ -13,6 +13,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 const props = defineProps<{
     sources: ObservableCollection<T>
 }>();
+const oriItems: Collection<T> = new Collection(...props.sources.items)
 const items = ref<Collection<T>>(new Collection(...props.sources.items))
 
 onMounted(() => {
@@ -26,22 +27,22 @@ onUnmounted(() => {
 const _onCollectionChanged = (args: CollectionChangedArgs) => {
     switch (args.action) {
         case CollectionAction.add:
-            items.value.push(...args.items);
+            oriItems.push(...args.items);
             break;
         case CollectionAction.remove:
-            items.value.remove(...args.items)
+            oriItems.remove(...args.items);
             break;
         case CollectionAction.move:
-            items.value.move(args.from, args.to);
+            oriItems.move(args.from, args.to);
             break;
         case CollectionAction.replace:
-            items.value.replace(args.index, ...args.items);
-            items.value.remove(args.item)
+            oriItems.replace(args.index, ...args.items);
+            oriItems.remove(args.item)
             break;
         default:
             throw new Error("Unknown collection action");
     }
+    items.value.clear()
+    items.value.push(...oriItems)
 }
 </script>
-
-<style lang="scss" scoped></style>

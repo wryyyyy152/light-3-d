@@ -1,10 +1,10 @@
 <template>
-    <div class="root">
-        <div class="headerPanel">
-            <span class="header" v-i18n="{ i18nKey: 'items.header' }"></span>
+    <div :class="style.root">
+        <div :class="style.headerPanel">
+            <span :class="style.header" v-i18n="{ i18nKey: 'items.header' }"></span>
             <ToolBar :document="activeDocument"></ToolBar>
         </div>
-        <div class="itemsPanel">
+        <div :class="style.itemsPanel">
             <Tree ref="treeRef" v-if="activeDocument" :document="activeDocument"></Tree>
         </div>
     </div>
@@ -20,6 +20,7 @@ import {
     PubSub,
 } from "light-core";
 import { onMounted, provide, ref, toRaw } from 'vue';
+import style from '../../styles/projectView.module.css';
 import ToolBar from './ToolBar.vue';
 import Tree from './tree/index.vue';
 import type TreeItem from './tree/TreeItem.vue';
@@ -47,44 +48,3 @@ const getTreeItem = (node: INode): InstanceType<typeof TreeItem> | undefined =>{
 }
 provide('getTreeItem', getTreeItem)
 </script>
-
-<style lang="scss" scoped>
-.root {
-    display: flex;
-    flex-direction: column;
-}
-
-.headerPanel {
-    display: flex;
-    flex-direction: row;
-    align-items: end;
-    flex: 0;
-    margin: 0px 12px;
-}
-
-.itemsPanel {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    overflow-y: auto;
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    background-color: var(--panel-background-color);
-}
-
-.header {
-    display: flex;
-    flex-direction: row;
-    font-size: 1.15rem;
-    font-weight: bolder;
-    flex: 1;
-    margin: 2px 6px;
-}
-</style>
-<style lang="scss">
-@media (max-width: 680px) {
-    .root {
-        display: none;
-    }
-}
-</style>

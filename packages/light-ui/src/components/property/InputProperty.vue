@@ -1,7 +1,7 @@
 <template>
-    <div class="panel">
-        <span class="propertyName" v-i18n="{ i18nKey: props.property.display }"></span>
-        <input class="box" :value="inputValue(props.objects[0])" :readonly="isReadOnly()"
+    <div :class="style.panel">
+        <span :class="style.propertyName" v-i18n="{ i18nKey: props.property.display }"></span>
+        <input :class="style.box" :value="inputValue(props.objects[0])" :readonly="isReadOnly()"
             @keydown="handleKeyDown($event)" @blur="handleBlur($event)">
     </div>
 </template>
@@ -15,6 +15,7 @@ import {
 } from "light-controls";
 import type { IConverter, IDocument, Property } from 'light-core';
 import { isPropertyChanged, PubSub, Transaction, XY, XYZ } from 'light-core';
+import style from '../../styles/input.module.css';
 import { ArrayValueConverter } from './utils';
 
 const props = defineProps<{
@@ -87,44 +88,3 @@ const setValue = (input: HTMLInputElement) => {
     });
 };
 </script>
-
-<style lang="scss" scoped>
-.panel {
-    margin: 3px 0;
-}
-
-.panel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-}
-
-.propertyName {
-    font-size: 14px;
-    opacity: 0.75;
-    color: var(--color);
-    min-width: 72px;
-    flex: 0 1 auto;
-}
-
-.readonly {
-    opacity: 0.56;
-}
-
-.box {
-    flex: 1;
-    font-size: 1rem;
-    padding: 4px;
-    outline: none;
-    background-color: transparent;
-
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    margin: 0px;
-
-    &:focus {
-        border-color: var(--primary-color);
-    }
-}
-</style>

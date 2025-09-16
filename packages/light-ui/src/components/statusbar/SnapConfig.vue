@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div :class="style.container">
         <div v-for="snapType in SnapTypes">
             <input type="checkbox" :id="`snap-${snapType.type}`"
                 :checked="ObjectSnapType.has(Config.instance.snapType, snapType.type)"
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import type { I18nKeys } from 'light-core';
 import { Config, ObjectSnapType } from 'light-core';
+import style from '../../styles/snapConfig.module.css';
 
 const init = () => {
     Config.instance.onPropertyChanged(snapTypeChanged);
@@ -65,31 +66,3 @@ const SnapTypes: Array<{
 
 init()
 </script>
-
-<style lang="scss" scoped>
-.container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    color: var(--foreground-color);
-
-    div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 4px;
-        user-select: none;
-
-        input {
-            width: 12px;
-            height: 12px;
-        }
-
-        label {
-            color: var(--foreground-color);
-            font-size: 12px;
-        }
-    }
-}
-</style>

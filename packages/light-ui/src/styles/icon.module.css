@@ -1,0 +1,8 @@
+.svgIcon {
+  width: 1em;
+  height: 1em;
+  position: relative;
+  vertical-align: -2px;
+  color: inherit;
+  fill: currentColor;
+}

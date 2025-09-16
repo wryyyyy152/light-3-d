@@ -75,7 +75,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .root {
     margin-top: 8px;
 }

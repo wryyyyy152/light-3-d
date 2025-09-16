@@ -1,18 +1,18 @@
 <template>
-    <div class="root">
+    <div :class="style.root">
         <Ribbon :application="application" :quick-commands="quickCommands" :ribbon-tabs="ribbonTabs" />
-        <div class="content">
-            <div class="sidebar">
-                <ProjectView class="sidebarItem"></ProjectView>
-                <PropertyView class="sidebarItem"></PropertyView>
+        <div :class="style.content">
+            <div :class="style.sidebar">
+                <ProjectView :class="style.sidebarItem"></ProjectView>
+                <PropertyView :class="style.sidebarItem"></PropertyView>
             </div>
-            <div class="viewportContainer">
+            <div :class="style.viewportContainer">
                 <MaterialEditor v-if="context" :data-content="context"></MaterialEditor>
                 <OKCancel ref="_selectionController"></OKCancel>
-                <LayoutViewport :app="application" class="viewport"></LayoutViewport>
+                <LayoutViewport :app="application" :class="style.viewport"></LayoutViewport>
             </div>
         </div>
-        <Statusbar class="statusbar"></Statusbar>
+        <Statusbar :class="style.statusbar"></Statusbar>
     </div>
 </template>
 
@@ -29,6 +29,7 @@ import Ribbon from '../../components/ribbon/index.vue';
 import { RibbonTabData } from '../../components/ribbon/ribbonData';
 import Statusbar from '../../components/statusbar/index.vue';
 import LayoutViewport from '../../components/viewport/LayoutViewport.vue';
+import style from '../../styles/editor.module.css';
 
 const application = inject<IApplication>('application')!;
 const tabs = inject<RibbonTab[]>('tabs')!;
@@ -40,7 +41,6 @@ const ribbonTabs = computed(() => {
 const quickCommands: CommandKeys[] = ["doc.save", "doc.saveToFile", "edit.undo", "edit.redo"];
 
 const registerRibbonCommand = (tabName: I18nKeys, groupName: I18nKeys, command: CommandKeys | Button) => {
-    // todo
     const tab = ribbonTabs.value.find((p) => p.tabName === tabName);
     const group = tab?.groups.find((p) => p.groupName === groupName);
     group?.items.push(command);
@@ -86,84 +86,3 @@ const _handleMaterialEdit = (
     context.value = new MaterialDataContent(document, callback, editingMaterial);
 };
 </script>
-
-<style lang="scss" scoped>
-.root {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--background-color);
-}
-
-.content {
-    display: flex;
-    flex-direction: row;
-    justify-content: stretch;
-    flex: 1 1 auto;
-    height: 0;
-
-    & .sidebar {
-        display: flex;
-        flex-direction: column;
-        min-width: 150px;
-        max-width: 85%;
-        background-color: var(--background-color);
-        position: relative;
-
-        & .sidebarItem {
-            margin-top: 10px;
-            overflow: hidden;
-            flex: 1 1 auto;
-            height: 0;
-        }
-    }
-
-    & .viewportContainer {
-        position: relative;
-        background-color: var(--viewport-background-color);
-        flex: 1 1 auto;
-        width: 0;
-
-        .viewport {
-            height: 100%;
-            position: relative;
-        }
-    }
-}
-
-.sidebarResizer {
-    width: 6px;
-    cursor: ew-resize;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
-    background: var(--resizer-gradient);
-    transition: background 0.2s;
-}
-.sidebarResizer:hover {
-    background: var(--resizer-gradient-hover);
-}
-
-.statusbar {
-    height: 24px;
-    display: flex;
-    flex-direction: column;
-}
-</style>
-<style lang="scss">
-@media (max-width: 680px) {
-    .content {
-        flex-direction: column-reverse;
-        min-height: 0;
-
-        & .viewportContainer {
-            height: 100px;
-            width: 100%;
-        }
-    }
-}
-</style>

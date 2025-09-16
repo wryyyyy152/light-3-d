@@ -43,5 +43,3 @@ defineExpose({
     addItem
 })
 </script>
-
-<style lang="scss" scoped></style>
