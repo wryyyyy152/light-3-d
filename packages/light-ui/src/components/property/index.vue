@@ -3,7 +3,7 @@
         <label :class="style.header" v-i18n="{ i18nKey: 'properties.header' }"></label>
         <div :class="style.panel">
             <div :class="style.properties">
-                <template v-for="(control) in controls" :key="index">
+                <template v-for="(control) in controls">
                     <component :is="control.component" v-bind="control.props" />
                 </template>
             </div>

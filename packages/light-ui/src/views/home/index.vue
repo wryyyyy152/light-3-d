@@ -102,7 +102,6 @@ const getDocuments = async () => {
 const documents = ref<ObservableCollection<RecentDocumentDTO> | undefined>(undefined);
 const init = async () => {
     documents.value = await getDocuments();
-    console.log(documents.value)
 }
 onMounted(() => {
     init()

@@ -36,7 +36,6 @@ export class CommandService implements IService {
     };
 
     private readonly executeCommand = async (commandName: CommandKeys) => {
-        console.log('-------executeCommand-------')
         const command = commandName === "special.last" ? this._lastCommand : commandName;
         if (!command || !(await this.canExecute(command))) return;
         Logger.info(`executing command ${command}`);
@@ -44,7 +43,6 @@ export class CommandService implements IService {
     };
 
     private async executeAsync(commandName: CommandKeys) {
-        console.log('-------executeAsync-------')
         const commandCtor = Command.get(commandName)!;
         if (!commandCtor) {
             Logger.error(`Can not find ${commandName} command`);

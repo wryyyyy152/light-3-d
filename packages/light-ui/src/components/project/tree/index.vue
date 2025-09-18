@@ -1,7 +1,7 @@
 <template>
     <div :class="style.panel" ref="panelRef">
         <template v-if="rootNode">
-            <TreeItem :document="document" :node="rootNode" :node-map="nodeMap" />
+            <TreeItem :document="document" :node="rootNode" />
         </template>
     </div>
 </template>
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { IDocument, INodeChangedObserver, NodeRecord } from 'light-core';
 import { INode, PubSub } from 'light-core';
-import { computed, defineExpose, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, provide, ref } from 'vue';
 import style from '../../../styles/tree.module.css';
 import TreeItem from './TreeItem.vue';
 
@@ -22,28 +22,17 @@ const rootNode = computed<INode | null>(() => {
     return props.document.rootNode || null;
 });
 
-// 维护每个节点的组件实例，以便通过实例调用方法
-const nodeMap: Map<INode, InstanceType<typeof TreeItem>> = new Map()
-// 之后每个节点创建后，都把实例放到map里
-
 const selectedNodes: Set<INode> = new Set();
 let lastClicked: INode | undefined = undefined;
 
 const treeForNodeChanged: INodeChangedObserver = {
     handleNodeChanged(records: NodeRecord[]) {
         records.forEach((record) => {
-            if (record.oldParent) {
-                let oloParent = nodeMap.get(record.oldParent)
-                if (oloParent) {
-                    oloParent.forceRefershComputed()
-                }
-            }
+            if (record.oldParent)
+                PubSub.default.pub('updateChildTreeItem', record.oldParent)
 
-            if (!record.newParent) return;
-            let newParent = nodeMap.get(record.newParent)
-            if (newParent) {
-                newParent.forceRefershComputed()
-            }
+            if (record.newParent)
+                PubSub.default.pub('updateChildTreeItem', record.newParent)
         })
     }
 }
@@ -53,7 +42,7 @@ onMounted(() => {
     nextTick(() => {
         addEvents(panelRef.value)
     })
-    
+
     props.document.addNodeObserver(treeForNodeChanged);
     PubSub.default.sub("selectionChanged", handleSelectionChanged);
 })
@@ -69,33 +58,22 @@ const handleSelectionChanged = (
     unselected: INode[],
 ) => {
     unselected.forEach((x) => {
-        nodeMap.get(x)?.removeSelectedStyle();
+        PubSub.default.pub("setTreeItemSelected", x, false);
         selectedNodes.delete(x);
     });
     setLastClickItem(undefined);
     selected.forEach((model) => {
         selectedNodes.add(model);
-        nodeMap.get(model)?.addSelectedStyle();
+        PubSub.default.pub("setTreeItemSelected", model, true);
     });
     scrollToNode(selected);
 };
-
-const setLastClickItem = (item: INode | undefined) => {
-    if (lastClicked !== undefined) {
-        nodeMap.get(lastClicked)?.removeSelectedStyle();
-    }
-    lastClicked = item;
-    if (item !== undefined) {
-        nodeMap.get(item)?.addSelectedStyle();
-        props.document.currentNode = INode.isLinkedListNode(item) ? item : item.parent;
-    }
-}
 
 const scrollToNode = (selected: INode[]) => {
     const node = selected.at(0);
     if (node) {
         expandParents(node);
-        nodeMap.get(node)?.$el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        PubSub.default.pub("scrollToNode", node);
     }
 }
 
@@ -103,36 +81,16 @@ const expandParents = (node: INode) => {
     let parent = node.parent;
 
     while (parent) {
-        const group = nodeMap.get(parent);
-        if (group) {
-            group.setExpanded(true);
-        }
+        PubSub.default.pub("setTreeItemExpanded", node, true);
         parent = parent.parent;
     }
 }
-
-const treeItem = (node: INode): InstanceType<typeof TreeItem> | undefined => {
-    return nodeMap.get(node);
-}
-
-defineExpose({
-    treeItem
-})
 
 const addEvents = (item: HTMLElement) => {
     item.addEventListener("dragstart", onDragStart);
     item.addEventListener("dragover", onDragOver);
     item.addEventListener("dragleave", onDragLeave);
     item.addEventListener("drop", onDrop);
-    item.addEventListener("click", onClick);
-}
-
-const removeEvents = (item: HTMLElement) => {
-    item.removeEventListener("dragstart", onDragStart);
-    item.removeEventListener("dragover", onDragOver);
-    item.removeEventListener("dragleave", onDragLeave);
-    item.removeEventListener("drop", onDrop);
-    item.removeEventListener("click", onClick);
 }
 
 const onDragLeave = (event: DragEvent) => {
@@ -185,19 +143,24 @@ const onDrop = (event: DragEvent) => {
     // });
 };
 
-const onClick = (event: MouseEvent) => {
-    // if (!this.canSelect()) return;
-
-    // const item = this.getTreeItem(event.target as HTMLElement)?.node;
-    // if (!item) return;
-    // event.stopPropagation();
-
-    // if (event.shiftKey) {
-    //     this.handleShiftClick(item);
-    // } else {
-    //     this.document.selection.setSelection([item], event.ctrlKey);
+const setLastClickItem = (item: INode | undefined): void => {
+    // if (lastClicked !== undefined) {
+    //     nodeMap.get(lastClicked)?.removeSelectedStyle();
     // }
+    // lastClicked = item;
+    // if (item !== undefined) {
+    //     nodeMap.get(item)?.addSelectedStyle();
+    //     props.document.currentNode = INode.isLinkedListNode(item) ? item : item.parent;
+    // }
+}
 
-    // this.setLastClickItem(item);
-};
+const handleShiftClick = (item: INode) => {
+    if (lastClicked) {
+        const nodes = INode.getNodesBetween(lastClicked, item);
+        props.document.selection.setSelection(nodes, false);
+    }
+}
+
+provide('setLastClickItem', setLastClickItem)
+provide('handleShiftClick', handleShiftClick)
 </script>

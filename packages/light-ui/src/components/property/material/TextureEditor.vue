@@ -1,22 +1,22 @@
 <template>
-    <div class="rootPanel root">
-        <div class="headerPanel">
-            <SvgIcon class="expanderIcon" :icon-name="getExpanderIcon()" @click="_handleExpanderClick($event)">
+    <div :class="[style.rootPanel,style.root]">
+        <div :class="style.headerPanel">
+            <SvgIcon :class="style.expanderIcon" :icon-name="getExpanderIcon()" @click="_handleExpanderClick($event)">
             </SvgIcon>
-            <label class="headerText" v-i18n="{ i18nKey: props.header }"></label>
+            <label :class="style.headerText" v-i18n="{ i18nKey: props.header }"></label>
         </div>
-        <div class="contextPanel" :class="{ 'hidden': !_isExpanded }">
+        <div :class="{[style.contextPanel]:true, [style.hidden]: !_isExpanded }">
             <template v-for="(control) in controls" :key="index">
                 <component :is="control.component" v-bind="control.props" />
             </template>
         </div>
-        <div class="expander">
-            <div class="properties">
+        <div :class="style.expander">
+            <div :class="style.properties">
                 <template v-for="(pro) in properties" :key="index">
                     <component :is="pro.component" v-bind="pro.props" />
                 </template>
             </div>
-            <div class="image">
+            <div :class="style.image">
                 <img :style="{
                     backgroundImage: getBackgroundImage(props.texture.image),
                     backgroundSize: 'contain',
@@ -32,6 +32,7 @@ import { UrlStringConverter } from 'light-controls';
 import type { I18nKeys, IDocument, Texture } from 'light-core';
 import { Property, readFileAsync } from 'light-core';
 import { defineExpose, ref } from 'vue';
+import style from '../../../styles/textureEditor.module.css';
 import SvgIcon from '../../common/SvgIcon.vue';
 import { type controlType } from '../../utils';
 import { findPropertyControl } from '../utils';
@@ -74,52 +75,3 @@ defineExpose({
     addItem
 })
 </script>
-
-<style lang="css" scoped>
-.root {
-    margin-top: 8px;
-}
-
-.expander {
-    display: flex;
-    flex-direction: row;
-}
-
-.properties {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.image {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 4px;
-    border-radius: 8px;
-    position: relative;
-    margin-left: 16px;
-
-    &:hover {
-        --delete-visiblity: visible;
-    }
-
-    img {
-        width: 96px;
-        height: 96px;
-        border-radius: 4px;
-    }
-
-    svg {
-        position: absolute;
-        background-color: rgba(255, 0, 0, 0.45);
-        border-radius: 50%;
-        padding: 4px;
-        top: 2px;
-        right: 2px;
-        width: 16px;
-        height: 16px;
-        visibility: var(--delete-visiblity);
-    }
-}
-</style>

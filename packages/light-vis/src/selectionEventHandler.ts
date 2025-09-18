@@ -116,6 +116,8 @@ export abstract class SelectionHandler implements IEventHandler {
             const count = this.select(view, event);
             this.cleanHighlights();
             view.update();
+            console.log(count)
+            console.log(this.multiMode)
             if (count > 0 && !this.multiMode) this.controller?.success();
         }
         this.pointerEventMap.delete(event.pointerId);

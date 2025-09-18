@@ -21,5 +21,3 @@ I18n.languages.forEach((language, index) =>
     })
 );
 </script>
-
-<style lang="css" scoped></style>

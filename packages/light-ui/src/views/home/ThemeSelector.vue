@@ -31,5 +31,3 @@ themes.forEach((theme) =>
     })
 );
 </script>
-
-<style lang="css" scoped></style>

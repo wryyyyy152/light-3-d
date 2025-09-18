@@ -91,7 +91,7 @@ const initEvent = () => {
 const addEventListenerHandler = (type: keyof HTMLElementEventMap, handler: (view: IView, e: any) => any) => {
     let listener = (e: any) => {
         e.preventDefault();
-        handler(props.view, e);
+        handler(toRaw(props.view), e);
     };
     rootRef.value?.addEventListener(type, listener);
     _eventCaches.push([type, listener]);

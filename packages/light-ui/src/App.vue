@@ -70,6 +70,3 @@ defineExpose({
     <Dialog ref="dialogRef"></Dialog>
   </Teleport>
 </template>
-
-<style scoped lang="css">
-</style>

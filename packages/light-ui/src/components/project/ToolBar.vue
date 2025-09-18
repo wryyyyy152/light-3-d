@@ -9,10 +9,9 @@
 <script setup lang="ts">
 import type { I18nKeys, IDocument } from 'light-core';
 import { I18n, INode, PubSub } from 'light-core';
-import { inject, ref } from 'vue';
+import { ref } from 'vue';
 import style from '../../styles/toolBar.module.css';
 import SvgIcon from '../common/SvgIcon.vue';
-import type TreeItem from './TreeItem.vue';
 
 const props = defineProps<{
     document: IDocument | undefined
@@ -41,11 +40,8 @@ const setExpand = (expand: boolean) => {
     if (first) setNodeExpand(first, expand);
 }
 
-const getTreeItem = inject<(node: INode) => InstanceType<typeof TreeItem> | undefined>('getTreeItem')
 const setNodeExpand = (list: INode, expand: boolean) => {
-    if (!getTreeItem) return
-    let item = getTreeItem(list);
-    item.setExpanded(expand)
+    PubSub.default.pub("setTreeItemExpanded", list, expand);
 
     if (INode.isLinkedListNode(list) && list.firstChild) {
         setNodeExpand(list.firstChild, expand);

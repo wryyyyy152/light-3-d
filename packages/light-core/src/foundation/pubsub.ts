@@ -43,6 +43,10 @@ export interface PubSubEventMap {
     //
     registerRibbonCommand: (tabName: I18nKeys, groupName: I18nKeys, command: CommandKeys | Button) => void;
     changeLanguage: () => void;
+    updateChildTreeItem: (node: INode) => void // 更新下一层的子节点
+    setTreeItemSelected: (node: INode, selected: boolean) => void // 选中节点
+    scrollToNode: (node: INode) => void
+    setTreeItemExpanded: (node: INode,expanded:boolean) => void
 }
 
 type EventCallback = (...args: any[]) => void;
