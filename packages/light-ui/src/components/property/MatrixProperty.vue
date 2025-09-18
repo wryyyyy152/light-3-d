@@ -25,7 +25,6 @@ import { RotateConverter, ScalingConverter, TranslationConverter } from './utils
 const props = defineProps<{
     document: IDocument,
     geometries: (VisualNode | GroupNode)[],
-    objects: any[],
 }>();
 
 const first: VisualNode | GroupNode = props.geometries[0]
@@ -44,7 +43,7 @@ onUnmounted(() => {
 
 const onPropertyChanged = (property: keyof (VisualNode | GroupNode)) => {
     if (property === "transform") {
-        props.objects.forEach((obj) => {
+        props.geometries.forEach((obj) => {
             if (obj === first) return;
             obj.transform = first.transform;
         });

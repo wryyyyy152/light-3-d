@@ -51,7 +51,6 @@ export class CommandService implements IService {
 
         const command = new commandCtor();
         this.app.executingCommand = command;
-        console.log(command)
         PubSub.default.pub("showProperties", this.app.activeView?.document!, []);
         try {
             await command.execute(this.app);

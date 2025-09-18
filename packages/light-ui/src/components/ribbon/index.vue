@@ -40,8 +40,9 @@
                 </SvgIcon>
             </div>
             <div :class="style.right">
-                <a href="https://github.com/xiangechen/chili3d" target="_blank"></a>
-                <SvgIcon title="Github" :class="style.icon" icon-name="icon-github"></SvgIcon>
+                <a href="https://github.com/wryyyyy152/light-3-d" target="_blank">
+                    <SvgIcon title="Github" :class="style.icon" icon-name="icon-github"></SvgIcon>
+                </a>
             </div>
         </div>
         <div :class="style.tabContentPanel">

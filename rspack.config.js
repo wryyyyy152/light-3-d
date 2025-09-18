@@ -26,30 +26,30 @@ const config = defineConfig({
                 use: 'vue-loader'
             },
             // 2. 处理所有 CSS/SCSS 相关资源（包括独立文件和 Vue 内的 style）
-            {
-                test: /\.(css|scss)$/, // 匹配 .css 和 .scss 类型的资源
-                exclude: /\.module\.(css|scss)$/, // 排除 .module.css 和 .module.scss
-                use: [
-                    'style-loader', // 将 CSS 注入 DOM（或用 mini-css-extract-plugin 提取为文件）
-                    'css-loader', // 解析 CSS
-                    'sass-loader' // 解析 SCSS（如果用不到 SCSS 可省略）
-                ]
+            // {
+            //     test: /\.(css|scss)$/, // 匹配 .css 和 .scss 类型的资源
+            //     exclude: /\.module\.(css|scss)$/, // 排除 .module.css 和 .module.scss
+            //     use: [
+            //         'style-loader', // 将 CSS 注入 DOM（或用 mini-css-extract-plugin 提取为文件）
+            //         'css-loader', // 解析 CSS
+            //         'sass-loader' // 解析 SCSS（如果用不到 SCSS 可省略）
+            //     ]
 
-            },
+            // },
             // 处理 CSS Module：.module.css 和 .module.scss
-            {
-                test: /\.module\.(css|scss)$/, // 专门匹配带 .module 的样式文件
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true // 启用 CSS Module 功能
-                        }
-                    },
-                    'sass-loader'
-                ]
-            },
+            // {
+            //     test: /\.module\.(css|scss)$/, // 专门匹配带 .module 的样式文件
+            //     use: [
+            //         'style-loader',
+            //         {
+            //             loader: 'css-loader',
+            //             options: {
+            //                 modules: true // 启用 CSS Module 功能
+            //             }
+            //         },
+            //         'sass-loader'
+            //     ]
+            // },
             {
                 test: /\.wasm$/,
                 type: "asset",

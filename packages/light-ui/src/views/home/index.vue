@@ -114,10 +114,6 @@ const displyHome = () => {
     PubSub.default.pub("displayHome", false);
 }
 
-const qrcode = () => {
-    PubSub.default.pub("executeCommand", "wechat.group");
-}
-
 const handleDocumentClick = (item: RecentDocumentDTO) => {
     if (hasOpen(item.id)) {
         PubSub.default.pub("displayHome", false);

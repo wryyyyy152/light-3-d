@@ -13,17 +13,15 @@
 <script setup lang="ts">
 import type {
     IDocument,
-    INode,
     IView
 } from 'light-core';
 import {
     PubSub,
 } from "light-core";
-import { onMounted, provide, ref, toRaw } from 'vue';
+import { onMounted, ref, toRaw } from 'vue';
 import style from '../../styles/projectView.module.css';
 import ToolBar from './ToolBar.vue';
 import Tree from './tree/index.vue';
-import type TreeItem from './tree/TreeItem.vue';
 
 const activeDocument = ref<IDocument | undefined>();
 
@@ -42,9 +40,4 @@ const handleActiveViewChanged = (view: IView | undefined) => {
 };
 
 const treeRef = ref<InstanceType<typeof Tree>>()
-const getTreeItem = (node: INode): InstanceType<typeof TreeItem> | undefined =>{
-    if (!treeRef.value) return
-    return treeRef.value.treeItem(node)
-}
-provide('getTreeItem', getTreeItem)
 </script>
