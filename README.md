@@ -16,27 +16,27 @@ flowchart LR
 
 基础图形绘制：
 
-<img src="D:\asCode\wryyyyy\light3D-qd\public\images\QQ20250919-132315.png" alt="QQ20250919-132315" style="zoom:80%;" />
+<img src=".\public\images\QQ20250919-132315.png" alt="QQ20250919-132315" style="zoom:80%;" />
 
 合并图形：
 
-<img src="D:\asCode\wryyyyy\light3D-qd\public\images\QQ20250919-133835.png" alt="QQ20250919-133835" style="zoom:80%;" />
+<img src=".\public\images\QQ20250919-133835.png" alt="QQ20250919-133835" style="zoom:80%;" />
 
 材质编辑：
 
-<img src="D:\asCode\wryyyyy\light3D-qd\public\images\QQ20250919-134201.png" alt="QQ20250919-134201" style="zoom:80%;" />
+<img src=".\public\images\QQ20250919-134201.png" alt="QQ20250919-134201" style="zoom:80%;" />
 
 扫略：
 
-<img src="D:\asCode\wryyyyy\light3D-qd\public\images\QQ20250919-133557.png" alt="QQ20250919-133557" style="zoom:80%;" />
+<img src=".\public\images\QQ20250919-133557.png" alt="QQ20250919-133557" style="zoom:80%;" />
 
 长度测量 & 角度测量：
 
-![QQ20250919-134112](D:\asCode\wryyyyy\light3D-qd\public\images\QQ20250919-134112.png)
+![QQ20250919-134112](.\public\images\QQ20250919-134112.png)
 
 用户主页：
 
-<img src="D:\asCode\wryyyyy\light3D-qd\public\images\QQ20250919-134459.png" alt="QQ20250919-134459" style="zoom:80%;" />
+<img src=".\public\images\QQ20250919-134459.png" alt="QQ20250919-134459" style="zoom:80%;" />
 
 # 3 代码目录结构
 
