@@ -2,14 +2,17 @@ import type { I18nKeys, IDocument, } from "light-core";
 import { AsyncController, Precision, XYZ } from "light-core";
 import type {
     PointSnapData,
-    SnapPointOnCurveData,
+    SnapPointOnAxisData,
+    SnapPointOnCurveData
 } from "../snap";
 import {
     Dimension,
     PointSnapEventHandler,
+    SnapPointOnAxisEventHandler,
     SnapPointOnCurveEventHandler,
+    SnapPointPlaneEventHandler,
 } from "../snap";
-import { SnapStep } from "./step";
+import { SnapStep, } from "./step";
 
 function defaultSnapedData(): PointSnapData {
     return { dimension: Dimension.D1 | Dimension.D1D2D3 };
@@ -44,5 +47,41 @@ export class PointOnCurveStep extends SnapStep<SnapPointOnCurveData> {
         data: SnapPointOnCurveData,
     ) {
         return new SnapPointOnCurveEventHandler(document, controller, data);
+    }
+}
+
+export class PointOnAxisStep extends SnapStep<SnapPointOnAxisData> {
+    constructor(tip: I18nKeys, handleData: () => SnapPointOnAxisData, keepSelected = false) {
+        super(tip, handleData, keepSelected);
+    }
+
+    protected override validator(data: SnapPointOnAxisData, point: XYZ): boolean {
+        return true;
+    }
+
+    protected override getEventHandler(
+        document: IDocument,
+        controller: AsyncController,
+        data: SnapPointOnAxisData,
+    ) {
+        return new SnapPointOnAxisEventHandler(document, controller, data);
+    }
+}
+
+export class PointOnPlaneStep extends SnapStep<PointSnapData> {
+    constructor(tip: I18nKeys, handleData: () => PointSnapData, keepSelected = false) {
+        super(tip, handleData, keepSelected);
+    }
+
+    protected override validator(data: PointSnapData, point: XYZ): boolean {
+        return true;
+    }
+
+    protected override getEventHandler(
+        document: IDocument,
+        controller: AsyncController,
+        data: SnapPointOnCurveData,
+    ) {
+        return new SnapPointPlaneEventHandler(document, controller, data);
     }
 }

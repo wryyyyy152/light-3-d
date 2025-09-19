@@ -1,15 +1,16 @@
-import type { I18nKeys, IDocument, } from "light-core";
+import type { I18nKeys, IDocument, ShapeType } from "light-core";
 import {
     AsyncController,
     Config,
     ICurve,
     IView,
     Plane,
+    Ray,
     XYZ
 } from "light-core";
 import { Dimension } from "../dimension";
 import type { ISnap, SnapData, SnapResult } from "../snap";
-import { ObjectSnap, PlaneSnap, PointOnCurveSnap, WorkplaneSnap } from "../snaps";
+import { AxisSnap, ObjectSnap, PlaneSnap, PointOnCurveSnap, WorkplaneSnap } from "../snaps";
 import { TrackingSnap } from "../tracking";
 import { SnapEventHandler } from "./snapEventHandler";
 
@@ -21,6 +22,10 @@ export interface PointSnapData extends SnapData {
 
 export interface SnapPointOnCurveData extends PointSnapData {
     curve: ICurve;
+}
+
+export interface SnapPointOnAxisData extends PointSnapData {
+    ray: Ray
 }
 
 export class PointSnapEventHandler extends SnapEventHandler<PointSnapData> {
@@ -128,5 +133,42 @@ export class SnapPointOnCurveEventHandler extends SnapEventHandler<SnapPointOnCu
 
     protected override inputError(text: string) {
         return Number.isNaN(Number(text)) ? "error.input.invalidNumber" : undefined;
+    }
+}
+
+export class SnapPointOnAxisEventHandler extends SnapEventHandler<SnapPointOnAxisData> {
+    constructor(document: IDocument, controller: AsyncController, pointData: SnapPointOnAxisData) {
+        const objectSnap = new ObjectSnap(Config.instance.snapType);
+        const snap = new AxisSnap(pointData.ray.location, pointData.ray.direction);
+        super(document, controller, [objectSnap, snap], pointData);
+    }
+
+    protected override getPointFromInput(view: IView, text: string): SnapResult {
+        const parameter = Number(text);
+        const point = this.data.ray.location.add(this.data.ray.direction.multiply(parameter));
+        return { point, view, shapes: [] };
+    }
+
+    protected override inputError(text: string) {
+        return Number.isNaN(Number(text)) ? "error.input.invalidNumber" : undefined;
+    }
+}
+
+export class SnapPointPlaneEventHandler extends PointSnapEventHandler {
+    protected override getInitSnaps(pointData: PointSnapData): ISnap[] {
+        if (!pointData.plane) throw new Error("plane is required");
+
+        return [
+            new ObjectSnap(Config.instance.snapType),
+            new PlaneSnap(pointData.plane)
+        ]
+    }
+
+    protected override findSnapPoint(shapeType: ShapeType, view: IView, event: PointerEvent): void {
+        super.findSnapPoint(shapeType, view, event);
+        
+        if (this._snaped?.point) {
+            this._snaped.point = this.data.plane!().project(this._snaped.point)
+        }
     }
 }
